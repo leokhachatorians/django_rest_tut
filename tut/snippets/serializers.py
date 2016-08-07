@@ -27,10 +27,20 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
         return instance
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    #snip#pets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
     snippets = serializers.HyperlinkedRelatedField(many=True, view_name='snippet-detail',
                                                    read_only=True)
 
     class Meta:
         model = User
-        fields = ('url', 'pk', 'username', 'snippets')
+        fields = ('url', 'pk', 'username', 'snippets', 'password', 'email')
+        write_only_fields = {'password'}
+
+    def create(self, validated_data):
+        u = User.objects.create(
+                username=validated_data['username'],
+                email=validated_data['email'],
+        )
+
+        u.set_password(validated_data['password'])
+        u.save()
+        return u
