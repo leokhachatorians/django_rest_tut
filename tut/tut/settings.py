@@ -53,6 +53,7 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'tut.urls'
+REST_FRAMEWORK = { 'PAGE_SIZE': 10 }
 
 TEMPLATES = [
     {
